@@ -1,0 +1,51 @@
+import sys
+
+N, M, V = map(int, sys.stdin.readline().split())
+matrix = [[0 for i in range(N)] for i in range(N)]     # 인접 행렬 생성
+
+for i in range(M):
+    x, y = map(int, sys.stdin.readline().split())
+    matrix[x-1][y-1] = 1
+    matrix[y-1][x-1] = 1
+
+
+def DFS(v, visit):     # v : 현재 위치한 노드 / visit : 방문 이력
+    visit[v] = 1
+    print(v+1, end=" ")
+
+    # 현재 노드에서 방문한 적 없는 노드 방문
+    for i in range(N):
+        if matrix[v][i] == 1 and visit[i] == 0:
+            DFS(i, visit)
+
+    return
+
+
+def BFS(v):           # v : 현재 위치한 노드
+    visit = [0 for i in range(N)]
+    visit[v] = 1
+    queue = []
+
+    # 현재 노드의 자식 노드들을 queue에 저장
+    while True:
+        print(v + 1, end=" ")
+        for i in range(N):
+            if matrix[v][i] == 1 and visit[i] == 0:
+                visit[i] = 1
+                queue.append(i)
+
+        if len(queue) == 0:
+            break
+
+        v = queue[0]
+        queue.pop(0)
+
+    return
+
+
+visit = [0 for i in range(N)]
+visit[V-1] = 1
+DFS(V-1, visit)
+print()
+
+BFS(V-1)
