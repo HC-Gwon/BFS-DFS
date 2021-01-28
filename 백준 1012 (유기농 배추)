@@ -1,0 +1,37 @@
+import sys
+sys.setrecursionlimit(10000)  # 재귀 횟수 변경
+
+dirX = [0, 0, -1, 1]       # 상하좌우
+dirY = [-1, 1, 0, 0]
+
+
+# 가로와 세로 값 대입하는 부분에 헤깔리지 않게 하기
+def DFS(x, y):
+    land[y][x] = 0
+
+    for i in range(4):
+        X = x + dirX[i]
+        Y = y + dirY[i]
+        if (0 <= X < M and 0 <= Y < N) and land[Y][X] == 1:
+            DFS(X, Y)
+
+    return
+
+
+T = int(sys.stdin.readline())
+for i in range(T):
+    M, N, K = map(int, sys.stdin.readline().split())    # 가로, 세로
+    land = [[0 for j in range(M)] for k in range(N)]
+
+    for j in range(K):
+        x, y = map(int, sys.stdin.readline().split())   # 가로, 세로
+        land[y][x] = 1
+
+    answer = 0
+    for j in range(N):
+        for k in range(M):
+            if land[j][k] == 1:
+                DFS(k, j)
+                answer += 1
+
+    print(answer)
