@@ -1,0 +1,29 @@
+import sys
+sys.setrecursionlimit(10000)
+
+N, M = map(int, sys.stdin.readline().split())
+graph = [[] for i in range(N)]       # 연결리스트
+for i in range(M):
+    x, y = map(int, sys.stdin.readline().split())
+    graph[x-1].append(y-1)
+    graph[y-1].append(x-1)
+
+visit = [0 for i in range(N)]
+
+
+def DFS(v, check):
+    if visit[v] == 0:
+        visit[v] = 1
+        check = 1
+        for i in range(len(graph[v])):
+            DFS(graph[v][i], check)
+
+    return check
+
+
+answer = 0
+for i in range(N):
+    check = 0
+    answer += DFS(i, check)
+
+print(answer)
