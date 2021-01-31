@@ -1,0 +1,39 @@
+import sys
+sys.setrecursionlimit(10000)
+
+
+dirX = [-1, 0, 1, 1, 1, 0, -1, -1]       # 7, 8, 9, 6, 3, 2, 1, 4
+dirY = [-1, -1, -1, 0, 1, 1, 1, 0]
+
+
+def DFS(x, y):
+    squareMap[y][x] = 0
+
+    for i in range(8):
+        X = x + dirX[i]
+        Y = y + dirY[i]
+        if (0 <= X < w and 0 <= Y < h) and squareMap[Y][X] == 1:
+            DFS(X, Y)
+
+    return
+
+
+while True:
+    w, h = map(int, sys.stdin.readline().split())
+    if w == 0 and h == 0:
+        break
+
+    squareMap = []
+    for i in range(h):
+        squareMap.append([])
+        squareMap[i] = list(map(int, sys.stdin.readline().split()))
+
+    answer = 0
+    for i in range(h):          # 세로
+        for j in range(w):      # 가로
+            if squareMap[i][j] == 1:
+                DFS(j, i)
+                answer += 1
+
+    print(answer)
+
