@@ -1,0 +1,38 @@
+import sys
+from collections import deque
+
+N, M = map(int, sys.stdin.readline().split())
+maze = [[0 for j in range(M)] for i in range(N)]
+answer = [[0 for j in range(M)] for i in range(N)]
+
+for i in range(N):
+    x = sys.stdin.readline().rstrip()
+    for j in range(len(x)):
+        maze[i][j] = int(x[j])
+
+queue = deque([(0, 0)])     # 이동할 위치를 담아둘 큐
+dirX = [0, 0, -1, 1]        # 상하좌우
+dirY = [-1, 1, 0, 0]
+answer[0][0] = 1
+maze[0][0] = 0
+
+while True:
+    posX = queue[0][0]
+    posY = queue[0][1]
+    queue.popleft()                 # deque를 사용해야 시간초과 방지 (O(pop(n)) = N)
+
+    for i in range(4):
+        X = posX + dirX[i]
+        Y = posY + dirY[i]
+
+        if (0 <= X < M and 0 <= Y < N) and maze[Y][X] == 1:
+            queue.append((X, Y))
+            maze[Y][X] = 0          # 방문하기로 결정하면 0으로 만들어줘야 메모리 초과가 발생안함
+
+            if answer[Y][X] == 0 or answer[posY][posX] + 1 < answer[Y][X]:
+                answer[Y][X] = answer[posY][posX] + 1
+
+    if len(queue) == 0:
+        break
+
+print(answer[N-1][M-1])
