@@ -1,0 +1,50 @@
+import sys
+from collections import deque
+
+M, N, K = map(int, sys.stdin.readline().split())
+space = [[0 for j in range(N)] for i in range(M)]
+
+for i in range(K):
+    x1, y1, x2, y2 = map(int, sys.stdin.readline().split())
+
+    for j in range(x2-x1):
+        for k in range(y2-y1):
+            space[y1+k][x1+j] = 1
+
+
+def BFS(x, y):
+    queue = deque([(x, y)])
+    space[y][x] = 1
+    dirX = [0, 0, -1, 1]       # 상하좌우
+    dirY = [-1, 1, 0, 0]
+
+    count = 1
+    while True:
+        x = queue[0][0]
+        y = queue[0][1]
+        queue.popleft()
+
+        for i in range(4):
+            X = x + dirX[i]
+            Y = y + dirY[i]
+            if (0 <= X < N and 0 <= Y < M) and space[Y][X] == 0:
+                queue.append((X, Y))
+                space[Y][X] = 1
+                count += 1
+
+        if len(queue) == 0:
+            break
+
+    return count
+
+
+answer = []
+for i in range(N):
+    for j in range(M):
+        if space[j][i] == 0:
+            answer.append(BFS(i, j))
+
+print(len(answer))
+answer.sort()
+for i in answer:
+    print(i, end=" ")
