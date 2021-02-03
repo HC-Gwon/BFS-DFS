@@ -1,0 +1,38 @@
+import sys
+from collections import deque
+
+T = int(sys.stdin.readline())
+for i in range(T):
+    I = int(sys.stdin.readline())
+    chessMap = [[0 for k in range(I)] for j in range(I)]
+    stX, stY = map(int, sys.stdin.readline().split())
+    endX, endY = map(int, sys.stdin.readline().split())
+
+    queue = deque([(stX, stY, 0)])
+    chessMap[stY][stX] = 1
+    dirX = [-2, -1, 1, 2, 2, 1, -1, -2]   # 좌측 상단, 우측 상단, 우측 하단, 좌측 하단
+    dirY = [1, 2, 2, 1, -1, -2, -2, -1]
+
+    while True:
+        x = queue[0][0]
+        y = queue[0][1]
+        count = queue[0][2]
+        queue.popleft()
+
+        check = 0
+
+        for j in range(8):
+            X = x + dirX[j]
+            Y = y + dirY[j]
+
+            if x == endX and y == endY:
+                check = 1
+                break
+
+            if (0 <= X < I and 0 <= Y < I) and chessMap[Y][X] == 0:
+                queue.append((X, Y, count+1))
+                chessMap[Y][X] = 1
+            
+        if check == 1:
+            print(count)
+            break
